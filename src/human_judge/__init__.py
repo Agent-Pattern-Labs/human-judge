@@ -1,5 +1,0 @@
-"""Safety evaluation harness for agentic AI outputs."""
-
-__all__ = ["__version__"]
-
-__version__ = "0.1.0"

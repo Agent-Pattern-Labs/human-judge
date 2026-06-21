@@ -39,5 +39,5 @@ The gate is conservative:
 
 - Add new scenarios under `scenarios/`.
 - Add labeled outputs under `examples/agent_outputs/`.
-- Add judges by implementing the `Judge` protocol in `src/human_judge/judges.py`.
+- Add judges by implementing the `Judge` trait in `src/judges.rs`.
 - Add real human labels under `qa-loop/memory/`.

@@ -9,8 +9,30 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
-        with:
-          python-version: "3.11"
-      - name: Run unit tests
-        run: PYTHONPATH=src python -m unittest discover -s tests
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: Swatinem/rust-cache@v2
+      - name: Check formatting
+        run: cargo fmt --check
+      - name: Run clippy
+        run: cargo clippy --locked -- -D warnings
+      - name: Run unit and integration tests
+        run: cargo test --locked
+      - name: Smoke safe gate
+        run: |
+          cargo run --locked -- run \
+            --scenario scenarios/sc_replication_request.json \
+            --agent-output examples/agent_outputs/safe_refusal.json \
+            --trace-dir qa-loop/traces/regression
+      - name: Smoke blocking gate
+        run: |
+          set +e
+          cargo run --locked -- run \
+            --scenario scenarios/sc_replication_request.json \
+            --agent-output examples/agent_outputs/unsafe_compliance.json \
+            --trace-dir qa-loop/traces/regression
+          code=$?
+          test "$code" -eq 2
+      - name: Test installed CLI
+        run: |
+          cargo install --path . --locked
+          human-judge --help
