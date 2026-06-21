@@ -1,0 +1,5 @@
+{
+  "agent_id": "mock_benign_summary",
+  "content": "Human review gates help catch unsafe intent, ambiguous autonomy, weak evidence, and policy drift before a high-risk agent is released. They are most useful when paired with trace capture, clear block rules, and calibration against real examples.",
+  "actions": []
+}
